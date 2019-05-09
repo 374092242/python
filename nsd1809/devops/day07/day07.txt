@@ -1,0 +1,173 @@
+ansible
+1、安装
+[root@room8pc16 zzg_pypkgs]# cd ansible_pkg/
+[root@room8pc16 ansible_pkg]# pip3 install *
+如果安装过程中有报错，提示某些tar包没有安装上，可以pip3 install xxx.tar.gz
+单独安装，然后再执行pip3 install *
+[root@room8pc16 day07]# python3
+>>> import ansible
+2、创建工作目录
+[root@room8pc16 day07]# mkdir mykvm
+[root@room8pc16 day07]# cd mykvm
+3、创建配置文件
+[root@room8pc16 mykvm]# vim ansible.cfg
+[defaults]
+inventory = hosts
+remote_user = root
+4、创建主机清单文件
+[root@room8pc16 mykvm]# vim hosts
+[dbservers]
+node4.tedu.cn
+
+[webservers]
+node5.tedu.cn
+node6.tedu.cn
+5、配置名称解析
+[root@room8pc16 mykvm]# for i in {1..254}
+> do
+> echo -e "192.168.4.$i\tnode$i.tedu.cn\tnode$i" >> /etc/hosts
+> done
+6、收集主机密钥
+[root@room8pc16 mykvm]# ssh-keyscan node{4..6}.tedu.cn >> /root/.ssh/known_hosts
+7、测试
+[root@room8pc16 mykvm]# ansible all -m ping -k
+
+
+ansible执行任务：
+一、adhoc临时命令
+[root@room8pc16 mykvm]# ansible webservers -m shell -a "id root" -k
+
+二、playbook
+1、修改vim
+[root@room8pc16 mykvm]# vim ~/.vimrc
+autocmd FileType yaml setlocal sw=2 ts=2 et ai
+2、创建playbook，实现免密登陆
+[root@room8pc16 ~]# ansible-doc authorized_key
+[root@room8pc16 mykvm]# vim auth.yml
+---
+- name: configure authentication
+  hosts: all
+  tasks:
+    - name: upload public key
+      authorized_key:
+        user: root
+        state: present
+        key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+3、语法检查
+[root@room8pc16 mykvm]# ansible-playbook --syntax-check auth.yml
+[root@room8pc16 mykvm]# ansible-playbook auth.yml -k
+
+4、配置yum
+(1) [root@room8pc16 mykvm]# mkdir files
+[root@room8pc16 mykvm]# vim files/server.repo
+(2)[root@room8pc16 mykvm]# vim yum.yml
+---
+- name: upload yum config file
+  hosts: all
+  tasks:
+    - name: upload file
+      copy:
+        src: files/server.repo
+        dest: /etc/yum.repos.d/server.repo
+(3) 执行
+[root@room8pc16 mykvm]# ansible-playbook --syntax-check yum.yml
+[root@room8pc16 mykvm]# ansible-playbook yum.yml
+
+5、实现LAMP
+[root@room8pc16 mykvm]# vim lamp.yml
+---
+- name: configure db servers
+  hosts: dbservers
+  tasks:
+    - name: install db pkgs
+      yum:
+        name: mariadb-server
+        state: latest
+    - name: start db service
+      service:
+        name: mariadb
+        state: started
+        enabled: yes
+
+- name: configure web servers
+  hosts: webservers
+  tasks:
+    - name: install web pkgs
+      yum:
+        name: [httpd, php, php-mysql]
+        state: present
+    - name: start web service
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+[root@room8pc16 mykvm]# ansible-playbook --syntax-check lamp.yml
+[root@room8pc16 mykvm]# ansible-playbook lamp.yml
+
+
+
+ansible手册
+https://docs.ansible.com/  => ansible documentation
+搜索python api
+
+命名的元组
+基于元组做进一步的扩展，为元组的下标起名
+>>> from collections import namedtuple
+>>> Point = namedtuple('Point', ['x', 'y', 'z'])
+>>> p1 = Point(10, 20, 30)
+>>> p1[0]
+10
+>>> p1[1:]
+(20, 30)
+>>> for p in p1:
+...     print(p)
+...
+10
+20
+30
+>>> p1.x
+10
+>>> p1.y
+20
+>>> p1.z
+30
+
+
+
+编写ansible模块
+1、创建一个保存自定义模块的路径
+[root@room8pc16 day07]# cd library/
+2、创建环境变量，声明当ansible执行任务时，也会到第1步创建的目录查找模块
+[root@room8pc16 day07]# export ANSIBLE_LIBRARY=/var/ftp/nsd_2018/nsd1809/devops/day07/library
+3、编写模块，如模块名为fuzhi.py
+4、测试
+[root@room8pc16 mykvm]# ansible dbservers -m fuzhi -a "yuan=/etc/hosts mubiao=/tmp/zhuji.txt"
+
+
+安装python软件包
+[root@node4 ~]# unzip wget-3.2.zip
+[root@node4 ~]# cd wget-3.2/
+[root@node4 wget-3.2]# python setup.py install
+
+
+ansible-cmdb:分析ansible收集来的主机信息，生成网页形式
+1、安装
+# cd ansible-cmdb_pkgs/
+# pip3 install *
+2、修改程序
+[root@room8pc16 ansible-cmdb_pkgs]# which ansible-cmdb
+# vim /usr/local/bin/ansible-cmdb
+将PY_BIN=$(which python)
+改成
+PY_BIN=$(which python3)
+3、生成主机信息到/tmp/out目录
+# ansible all -m setup --tree /tmp/out
+4、通过ansible-cmdb分析主机信息，生成网页
+# ansible-cmdb /tmp/out/ > /tmp/hosts.html
+# firefox /tmp/hosts.html
+
+
+
+
+
+

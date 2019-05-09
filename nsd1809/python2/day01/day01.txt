@@ -1,0 +1,176 @@
+学习方法：
+1、清楚难点、重点。先掌握重点知识
+2、记主要内容，其他的要了解功能
+3、编程思路
+4、代码量
+a = 'hao123'
+for ch in a:
+    if ch not in '0123456789':
+        print('not digit')
+        break
+
+
+列表：容器、有序、可变
+>>> alist = [10, 100, 50, 30, 28]
+>>> len(alist)
+
+>>> for i in alist:
+...     print(i)
+
+>>> for ind in range(len(alist)):
+...     print('%s: %s' % (ind, alist[ind]))
+
+>>> for item in enumerate(alist):
+...     print('%s: %s' % (item[0], item[1]))
+
+>>> for ind, val in enumerate(alist):
+...     print('%s: %s' % (ind, val))
+
+
+列表方法：
+>>> alist.append(60)    # 追加
+>>> alist.index(50)     # 取出50的下标，不常用
+>>> alist.insert(2, 60) # 在下标为2的位置加上60
+>>> alist.count(60)     # 统计60出现的次数，不常用
+>>> alist.remove(60)    # 删除第一个60
+>>> alist.pop()         # 弹出最后一项
+>>> alist.pop(2)        # 弹出下标为2的项目
+>>> alist.reverse()     # 翻转
+>>> alist.sort()        # 升序排序
+>>> alist.sort(reverse=True)    # 降序排序，不常用
+
+元组：相当于是静态的列表
+>>> atuple = (10, 30, 15, 20, 60, 60)
+>>> atuple.count(60)
+>>> atuple.index(60)
+>>> a = (10)
+>>> type(a)
+<class 'int'>
+>>> b = (10,)   # 单元素元组，必须有逗号，否则不是元组
+>>> type(b)
+<class 'tuple'>
+
+
+编程思路：
+1、发呆
+思考程序如何运行：交互？非交互？
+如果是交互式的，脑补，屏幕上有什么提示，用户怎么回答。回答完后，又有什么提示，
+用户又会怎么回答……一直到结束
+2、分析程序有哪些功能，把这些功能编写成功能函数，写出程序的大体框架
+3、逐一编写每个函数
+
+
+
+字典：容器、可变、映射
+1、创建字典的方法
+>>> adict = {'name': 'bob', 'age': 22}
+>>> bdict = dict(['ab', ['qq', '12353235'], ('phone', '15098762737')])
+>>> cdict = {}.fromkeys(('zs', 'ls', 'ww'), 7)
+2、访问字典
+>>> len(adict)
+>>> 'bob' in adict   # False
+>>> 'name' in adict     # True
+>>> for key in adict:
+...     print('%s: %s' % (key, adict[key]))
+>>> '%(name)s is %(age)s years old' % adict
+3、更新字典
+字典的key不能重复
+给一个key赋值的时候，key不存在，则向字典中加入数据；如果已存在，则修改
+>>> adict['name'] = 'tom'
+>>> adict['email'] = 'tom@tedu.cn'
+4、字典的方法
+>>> for key in adict.keys():
+...     print(key)
+>>> for val in adict.values():
+...     print(val)
+>>> for key, val in adict.items():
+...     print(key, val)
+>>> print(adict.get('email'))   # 重点
+>>> print(adict.get('qq'))   # qq不是字典的key，默认返回None
+>>> print(adict.get('qq', 'not found'))   # 指定key不存在时的返回值
+>>> print(adict.get('email', 'not found'))
+
+>>> adict.pop('email')
+>>> adict.popitem()   # 随机弹出一项
+>>> bdict = adict     # 两个字典指向同一地址空间
+>>> bdict['phone'] = '12345678'   # 修改任一字典，两个字典都会受到影响
+>>> cdict = adict.copy()  # cdict只包含了adict的内容，但是不指向同一地址空间
+>>> id(adict)   # 查看字典在内存中的地址
+>>> id(bdict)   # adict和bdict一样
+>>> id(cdict)   # cdict有自己的全新的地址
+
+>>> adict.update({'age': 23, 'email': 'bob@tedu.cn'})
+
+
+空白字符：空格、\n回车、\t制表符tab键、\v\f、\r回车不换行
+
+编写类似于进度条的程序，让@从20个#号中间穿过
+1、动画，实际上很多是不动的，采用的不断覆盖
+####################
+@###################
+#@##################
+##@#################
+2、为了实现覆盖效果，可以用\r回车不换行
+
+
+集合：由不同的、不可变元素构成一个集合，它是无序的
+字典的键也是不同的，也必须是不可变的，所以集合就像是一个无值的字典
+>>> aset = set('abc')
+>>> bset = set('cde')
+>>> len(aset)
+>>> for ch in aset:
+...     print(ch)
+>>> aset | bset     # 并集
+>>> aset & bset     # 交集
+>>> aset - bset     # 差补，只出现在aset中，不能出现在bset中
+>>> aset.add('new')   # 添加new到集合中
+>>> aset.update('new')  # 把new的每个字母当成一项，加入集合
+>>> aset.update(['hello', 'world'])   # 把列表中的每一项加入集合
+>>> bset.issubset(aset)   # 如果bset中的每一项都在aset中，那么bset就是aset的子集，aset是bset的超集
+>>> aset.issuperset(bset)   # aset是bset的超集吗？
+>>> aset.union(bset)    # aset | bset
+>>> aset.intersection(bset)     # aset & bset
+>>> aset.difference(bset)   # aset - bset
+
+
+通过集合去重
+>>> import random
+# 能过列表解析，生成具有20个随机数字的列表
+>>> alist = [random.randint(1, 20) for i in range(20)]
+>>> aset = set(alist)   # 将列表转换成集合
+>>> blist = list(aset)  # 将集合转换成列表
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

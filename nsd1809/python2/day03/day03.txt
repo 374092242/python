@@ -1,0 +1,111 @@
+偏函数：相当于是改造现有函数，将一些参数固定下来后，生成新的函数
+>>> def add(a, b, c, d, e):
+...     return a + b + c + d + e
+函数接受5个参数，但是大多数情况下，调用函数，前4个参数是固定的
+>>> add(10, 20, 30, 40, 5)
+>>> add(10, 20, 30, 40, 8)
+可以改造add函数，将前4个参数固定，生成的新函数取名为myadd
+>>> from functools import parial
+>>> myadd = partial(add, 10, 20, 30, 40)
+>>> myadd(5)
+>>> myadd(8)
+
+
+递归函数：函数体内又包含对自身的调用
+比如数字的阶乘：
+5!=5x4x3x2x1
+5!=5x4!
+5!=5x4x3!
+5!=5x4x3x2!
+5!=5x4x3x2x1!
+1!=1
+
+
+生成器：本质上是一个函数。常规的函数只能返回一个最终结果，但是生成器可以通过
+yield语句，返回很多中间结果。
+>>> def mygen():
+...     yield 'hello world'
+...     a = 10 + 20
+...     yield a
+...     yield [1, 2, 3]
+>>> a = mygen()
+>>> a.__next__()
+>>> b = mygen()
+>>> for item in b:
+...     print(item)
+
+
+模块：
+1、模块导入的时候将会搜索两个路径
+(1) sys.path定义的路径
+(2) PYTHONPATH环境变量定义的路径
+2、导入模块
+>>> import string as s
+>>> s.ascii_letters
+'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+>>> s.digits
+'0123456789'
+3、模块文件不管导入多少回，只以第一次为准（只加载一次）
+
+包
+1、包对应目录，可以当成特殊的模块
+[root@room8pc16 day03]# mkdir mydemo  # python把mydemo当成包
+[root@room8pc16 day03]# echo 'hi = "Hello World"' > mydemo/hello.py
+>>> import mydemo.hello
+>>> mydemo.hello.hi
+2、如果是py2，需要在目录里创建__init__.py文件才能成为包
+3、写到__init__.py中的内容就成为了包的内容(py2/py3一样)
+[root@room8pc16 day03]# echo 'name = "bob"' > mydemo/__init__.py
+>>> import mydemo
+>>> mydemo.name
+'bob'
+
+
+hashlib模块
+1、md5：是一种单向加密的算法。
+单向加密就是相同的数据总是能生成相同长度的乱码。源数据相同，乱码也一定是相同的。
+不能通过乱码反推回原始数据。可以用来存储密码，也可以用来校验文件的完整性。
+2、应用
+>>> import hashlib
+>>> m = hashlib.md5(b'123456')
+>>> m.hexdigest()
+
+>>> with open('/etc/passwd', 'rb') as fobj:
+...     data = fobj.read()
+>>> m = hashlib.md5(data)
+>>> m.hexdigest()
+
+tarfile模块
+1、压缩
+>>> import tarfile
+>>> tar = tarfile.open('/tmp/mydemo/anquan.tar.gz', 'w:gz')
+>>> tar.add('/etc/hosts')
+>>> import os
+>>> os.chdir('/etc')
+>>> tar.add('security')
+>>> tar.close()
+2、解压
+>>> os.chdir('/tmp/mydemo')
+>>> tar = tarfile.open('/tmp/mydemo/anquan.tar.gz', 'r:gz')
+>>> tar.extractall()
+>>> tar.close()
+
+
+备份
+周一：abc.txt  access.conf  hosts
+{'abc.txt': 'md5', 'access.conf': 'md5', 'hosts': 'md5'}
+周二：abc.txt(修改)  access.conf  hosts  passwd
+{'abc.txt': 'md5', 'access.conf': 'md5', 'hosts': 'md5', 'passwd': 'md5'}
+完全：压缩目录、计算每个文件的md5值
+增量：计算每个文件的md5值，与前一天的md5值比较，新文件和改动文件压缩
+获取某一目录中的所有文件（包括子目录中的文件）
+>>> list(os.walk('/etc/security'))
+
+
+
+
+
+
+
+
+

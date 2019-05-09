@@ -1,0 +1,208 @@
+数据类型：
+存储：
+(1) 标量：数字、字符串
+(2) 容器：列表、元组、字典
+更新：
+(1) 可变：列表、字典
+(2) 不可变：字符串、元组、数字
+访问：
+(1) 直接：数字
+(2) 顺序：字符串、列表、元组
+(3) 映射：字典
+
+
+时间的表示方式：重要
+1、时间戳：某一时刻距离1970年1月1号0点的秒数   time.time()
+2、UTC：世界协调时间。把全球分为24个时区，以格林威治为参考点   time.ctime()
+3、9元组：time.localtime()
+>>> t = time.localtime()
+>>> t.tm_year
+>>> t.tm_wday
+
+time模块常用方法
+>>> time.time()     # 返回当前时间的时间戳
+>>> time.ctime()    # 返回当前时间的UTC形式
+>>> time.localtime()        # 返回当前时间的9元组
+>>> time.sleep(3)       # 睡眠3秒
+>>> time.strftime('%Y-%m-%d')       # 返回 2019-02-18
+>>> time.strftime('%H:%M:%S')
+>>> time.strftime('%a')
+>>> time.strftime('%A')
+
+https://yiyibooks.cn/  => python352 => 库参考 => ctrl+f搜索
+
+datetime模块
+>>> from datetime import datetime
+>>> t = datetime.now()   # 年月日时分秒毫秒
+>>> t.year
+>>> t.month
+>>> t.day
+>>> t.hour
+>>> t.minute
+>>> t.second
+>>> t.microsecond
+>>> t1 = datetime(2018, 10, 1)
+>>> t > t1
+
+>>> from datetime import timedelta
+>>> days = timedelta(days=50, hours=5, minutes=30)   # 设定50天
+>>> t = datetime.now()   # 当前时间
+>>> t - days    # 50天以前的时间
+>>> t + days    # 50天之后的时间
+
+
+异常处理
+程序遇到错误后，停止执行，抛出异常
+
+主动触发异常
+1、使用raise触发异常
+def set_age(name, age):
+    if not 0 < age < 120:
+        raise ValueError('年龄超过范围')
+    print('%s is %s years old' % (name, age))
+2、断言异常
+出现异常的时候，一定触发AssertionError
+
+
+
+os模块
+>>> import os
+>>> os.getcwd()     # pwd
+>>> os.mkdir('/tmp/mydemo')     # mkdir /tmp/mydemo
+>>> os.listdir('/tmp/mydemo')   # ls /tmp/mydemo
+>>> os.chdir('/tmp/mydemo')     # cd /tmp/mydemo
+>>> os.mknod('abc.txt')     # touch abc.txt
+>>> os.listdir()        # ls
+>>> os.chmod('abc.txt', 0o644)  # chmod 644 abc.txt
+>>> os.symlink('/etc/hosts', 'zj')      # ln -s /etc/hosts zj
+>>> os.remove('abc.txt')    # rm abc.txt
+>>> os.unlink('zj')     # unlink zj
+>>> os.path.isfile('/etc/hosts')    # 是否存在，并且是文件
+>>> os.path.isdir('/etc/hosts')     # 是否是目录
+>>> os.path.islink('/etc/grub2.cfg')    # 是否是软链接
+>>> os.path.exists('/etc')      # 是否存在
+>>> os.path.split('/etc/sysconfig/network-scripts/ifcfg-eth0')
+>>> os.path.join('/etc/sysconfig/network-scripts', 'ifcfg-eth0')
+>>> os.path.basename('/etc/sysconfig/network-scripts/ifcfg-eth0')
+>>> os.path.dirname('/etc/sysconfig/network-scripts/ifcfg-eth0')
+
+
+pickle模块
+常规的文件写操作，只能把字符串写到文件中。如果希望可以把任意类型的数据写入到
+文件，取出时不变，就要用到pickle了。
+pickle是个存储器，可以把任意类型的数据写到文件中，还能再无损地取出来。
+>>> import pickle
+>>> shoplist = ['egg', 'banana', 'apple', 'brush']
+>>> f = open('/tmp/shop.data', 'wb')
+>>> pickle.dump(shoplist, f)
+
+>>> f = open('/tmp/shop.data', 'rb')
+>>> alist = pickle.load(f)
+>>> type(alist)
+<class 'list'>
+>>> alist
+['egg', 'banana', 'apple', 'brush']
+>>> alist[0]
+'egg'
+
+
+关键字参数：  key:val   key=val
+>>> def get_age(name, age):
+...     print('%s is %s years old.' % (name, age))
+>>> get_age('bob', 20)  # 正确
+>>> get_age()       # error, 参数个数不够
+>>> get_age('bob', 20, 200)     # error, 参数太多
+>>> get_age(20, 'bob')      # 没错误，但是语义不对
+>>> get_age(age=20, name='bob')     # 正确
+>>> get_age(age=20, 'bob')   # error, key=val的形式必须在后面
+>>> get_age(20, name='bob')     # error，name得到了多个值
+>>> get_age('bob', age=20)      # 正确
+
+
+参数个数不固定的函数
+>>> def func1(*args):       # *表示args是个元组
+...     print(args)
+>>> func1()
+>>> func1(10)
+>>> func1(10, 20, 30, 'bob', 'alice')
+
+>>> def func2(**kwargs):        # **表示kwargs是个字典
+...     print(kwargs)
+>>> func2()
+>>> func2(name='bob', age=20)
+
+
+函数调用传参时，如果使用了*号，表示把这个参数的值拆开
+>>> def add(x, y):
+...     print(x + y)
+>>> nums = [20, 15]
+>>> add(*nums)  # nums列表将会拆分成两个独立的数字20和15传给x和y
+
+
+匿名函数：没有名称的函数，通过lambda定义
+>>> def add(x, y):
+...     return x + y
+
+>>> jiafa = lambda x, y: x + y   # x,y是两个参数，x+y的结果是返回值
+>>> jiafa(10, 5)
+
+
+
+变量：
+1.全局变量：在函数外面定义的变量。它从变量的定义处一直到程序结束，任何地方可见可用
+>>> x = 10
+>>> def foo():
+...     print(x)
+...
+>>> foo()
+2.局部变量：在函数内部定义。当函数调用结束后，局部变量消失
+>>> def func1():
+...     y = 20
+...     print(y)
+>>> func1()
+20
+>>> y      # NameError
+3.全局和局部如果有同名的变量，函数调用时，首先查找局部。局部变量将会把全局变
+量遮盖住。
+>>> def func2():
+...     x = 'hello'
+...     print(x)
+>>> func2()     # 局部的x，值是hello
+>>> x           # 全局的x，值是10
+4.可以在局部使用global语句，调用全局的变量
+>>> def func4():
+...     global x    # 声明函数内部使用的x，是全局变量x
+...     x = 'ni hao'
+...     print(x)
+>>> func4()
+ni hao
+>>> x   # ni hao
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

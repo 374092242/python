@@ -1,0 +1,119 @@
+模拟通过浏览器访问WEB服务器
+1、配置头部信息
+>>> from urllib import request
+>>> header = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0'}
+2、创建Request对象
+>>> url = 'http://127.0.0.1/'
+>>> r = request.Request(url, headers=header)
+3、打开Request对象，观察日志
+>>> html = request.urlopen(r)
+
+数据编码：
+在URL中，只支持一部分字符集，其他字符需要进行编码。
+1、如，在搜狗中搜索“达内”，URL可以看到汉字，但是复制到下面，这就是这样的显示：
+https://www.sogou.com/web?query=%E8%BE%BE%E5%86%85
+2、通过urllib进行数据编码
+>>> url = 'https://www.sogo.com/web?query='
+>>> word = request.quote('达内')
+>>> url + word
+'https://www.sogo.com/web?query=%E8%BE%BE%E5%86%85'
+
+异常处理
+1、环境准备
+http://127.0.0.1/abc   => 不存在
+http://127.0.0.1/ban   -> 没权限
+2、通过urllib进行访问，观察异常
+>>> url1 = 'http://127.0.0.1/abc/'
+>>> url2 = 'http://127.0.0.1/ban/'
+>>> request.urlopen(url1)
+>>> request.urlopen(url2)
+3、异常处理
+>>> import urllib.error
+
+##########################################
+qq主页，下载后通过file命令查看，它是gzip文件，不是html文件。
+>>> import gzip
+>>> f = gzip.open('/tmp/qq.html', 'rb')
+>>> data = f.read()
+>>> f.close()
+>>> data.decode('gbk')  # 默认是utf8
+##########################################
+[root@room8pc16 day04]# pip3 install wget
+>>> import wget
+>>> wget.download(url='https://upload-images.jianshu.io/upload_images/12347101-0548326de2ebc9bc.png', '/tmp/')
+##########################################
+
+
+
+
+
+
+paramiko: ssh客户端
+1、安装
+[root@room8pc16 zzg_pypkgs]# cd paramiko_pkgs/
+[root@room8pc16 paramiko_pkgs]# pip3 install *
+2、应用
+>>> import paramiko
+>>> ssh = paramiko.SSHClient()  # 创建SSHClient的实例
+>>> ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())  # 回答yes
+>>> ssh.connect('192.168.4.4', username='root', password='123456')
+>>> ssh.exec_command('mkdir /tmp/mydemo')  # 执行命令
+>>> ssh.close()  # 关闭连接
+3、执行命令的返回值
+>>> ssh = paramiko.SSHClient()
+>>> ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+>>> ssh.connect('192.168.4.4', username='root', password='123456')
+>>> result = ssh.exec_command('id root; id tom')
+>>> len(result)  => 3
+执行命令返回的值共有3项，分别是输入、输出和错误的类文件对象
+>>> result[1].read()
+b'uid=0(root) gid=0(root) \xe7\xbb\x84=0(root)\n'
+>>> result[2].read()
+b'id: tom: no such user\n'
+>>> ssh.close()
+
+
+
+邮件编程：
+一、邮件内容
+
+二、发邮件
+
+
+
+JSON: 可以在网络上发送任意的数据类型。JSON独立于语言，收发双方采用的语言可以
+是不一样的任意语言
+>>> import json
+>>> adict = {'name': 'bob', 'age': 20}
+>>> data = json.dumps(adict)  # 转换成json字符串
+>>> new_dict = json.loads(data)  # 将json字符串转成python数据类型
+>>> type(new_dict)
+<class 'dict'>
+>>> new_dict['age']
+20
+
+
+中国天气网API
+实况天气获取:http://www.weather.com.cn/data/sk/城市代码.html
+城市信息获取:http://www.weather.com.cn/data/cityinfo/城市代码.html
+详细指数获取:http://www.weather.com.cn/data/zs/城市代码.html
+网上搜索“中国天气网城市代码”  101010100
+
+>>> from urllib import request
+>>> import json
+>>> url = 'http://www.weather.com.cn/data/sk/101010100.html'
+>>> r = request.urlopen(url)
+>>> data = r.read()
+>>> bj = json.loads(data)
+>>> import pprint
+>>> pprint.pprint(bj)
+>>> pprint.pprint(bj['weatherinfo'])
+>>> pprint.pprint(bj['weatherinfo']['temp'])
+
+图标地址：
+http://www.weather.com.cn/m/i/weatherpic/29x20/d2.gif
+
+
+
+
+

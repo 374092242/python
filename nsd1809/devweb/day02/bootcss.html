@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>bootcss</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+    <script>
+        function clickme() {
+            alert('Welcome to TEDU!')
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <img class="img-thumbnail" src="static/imgs/html_css.jpeg">
+    <img class="img-circle" src="static/imgs/html_css.jpeg">
+    <img class="img-rounded" src="static/imgs/html_css.jpeg">
+    <img src="static/imgs/html_css.jpeg">
+    <hr>
+    <i class="glyphicon glyphicon-heart"></i>
+    <i class="glyphicon glyphicon-map-marker"></i>
+    <span class="glyphicon glyphicon-camera"></span>
+    <hr>
+    <div class="form-group has-warning">
+        <label class="control-label">反馈</label>
+        <input class="form-control" type="text">
+    </div>
+    <hr>
+    <div class="form-group has-success">
+        <label class="control-label">反馈</label>
+        <input class="form-control" type="text">
+    </div>
+    <hr>
+    <div class="form-group has-error">
+        <label class="control-label">反馈</label>
+        <input class="form-control" type="text">
+    </div>
+
+    <hr>
+    <div class="form-group">
+        <select class="form-control" name="" id="">
+            <option value="">linux</option>
+            <option value="">windows</option>
+            <option value="">python</option>
+        </select>
+    </div>
+    <hr>
+    <div class="checkbox">
+        <label><input type="checkbox">linux</label>
+        <label><input type="checkbox">windows</label>
+        <label><input type="checkbox">python</label>
+    </div>
+    <hr>
+    <div class="input-group">
+        <div class="input-group-addon">$</div>
+        <input class="form-control" type="text">
+        <div class="input-group-addon">.00</div>
+    </div>
+
+    <hr>
+    <form action="" class="form-inline">
+        <div class="form-group">
+            <label>用户名：</label>
+            <input class="form-control" type="text">
+        </div>
+        <div class="form-group">
+            <label>密码：</label>
+            <input class="form-control" type="password">
+        </div>
+        <div class="form-group">
+            <input class="btn btn-primary" type="submit" value="登 陆">
+        </div>
+    </form>
+    <hr>
+    <form action="">
+        <div class="form-group">
+            <label>用户名：</label>
+            <input class="form-control" type="text">
+        </div>
+        <div class="form-group">
+            <label>密码：</label>
+            <input class="form-control" type="password">
+        </div>
+        <div class="form-group">
+            <input class="btn btn-primary" type="submit" value="登 陆">
+        </div>
+    </form>
+    <hr>
+    <form action="">
+        <div>
+            <label>用户名：</label>
+            <input type="text">
+        </div>
+        <div>
+            <label>密码：</label>
+            <input type="password">
+        </div>
+        <div>
+            <input type="submit" value="登 陆">
+        </div>
+    </form>
+    <hr>
+    <p class="h4">基本的表单结构是 Bootstrap 自带的，个别的表单控件自动接收一些全局样式。下面列出了创建基本表单的步骤：<br>
+
+    向父 &lt;form&gt; 元素添加 role="form"。<br>
+    把标签和控件放在一个带有 class .form-group 的 &lt;div&gt; 中。这是获取最佳间距所必需的。<br>
+    向所有的文本元素 &lt;input&gt;、&lt;textarea&gt; 和 &lt;select&gt; 添加 class ="form-control" 。
+    </p>
+    <hr>
+    <button class="btn btn-primary btn-block">按 钮</button>
+    <hr>
+    <button class="btn btn-primary btn-lg">按 钮</button>
+    <button class="btn btn-warning btn-sm">按 钮</button>
+    <button class="btn btn-success btn-xs">按 钮</button>
+    <button class="btn btn-danger">按 钮</button>
+    <button class="btn btn-warning">按 钮</button>
+    <button class="btn btn-success">按 钮</button>
+    <button class="btn btn-info">按 钮</button>
+    <button class="btn btn-primary">按 钮</button>
+    <button class="btn btn-default" onclick="clickme()">按 钮</button>
+    <input class="btn" type="submit" value="按 钮">
+    <hr>
+    <table class="table table-bordered table-striped table-hover">
+        <tr class="info text-center">
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+        </tr>
+    </table>
+    <hr>
+    <p class="h3 text-primary bg-danger">Bootstrap 框架</p>
+    <p class="h3 text-center text-info bg-success">Bootstrap 框架</p>
+    <p class="h3 text-right text-warning bg-primary">Bootstrap 框架</p>
+    <p class="h3 text-success bg-info">Bootstrap 框架</p>
+    <p class="h3 text-danger bg-warning">Bootstrap 框架</p>
+
+
+    <p class="h3">
+        <small>Bootstrap 框架</small> <strong>Bootstrap 框架</strong>
+        <em>Bootstrap 框架</em>
+        <hr>
+        <del>Bootstrap 框架</del> <s>Bootstrap 框架</s>
+        <ins>Bootstrap 框架</ins> <u>Bootstrap 框架</u>
+    </p>
+    <hr>
+    <p class="h3">Bootstrap<mark>框架</mark></p>
+    <p class="h3">这是P元素，字号与h3标题一样大</p>
+    <h1>Bootstrap 框架</h1>
+    <h2>Bootstrap 框架</h2>
+    <h3>Bootstrap 框架</h3>
+    <h4>Bootstrap 框架</h4>
+    <h5>Bootstrap 框架</h5>
+    <h6>Bootstrap 框架</h6>
+    <p>Bootstrap 框架</p>
+    <p class="lead">Bootstrap 框架</p>
+    <p>Bootstrap 框架</p>
+    <p>Bootstrap 框架</p>
+    <p>Bootstrap 框架</p>
+    按<kbd>ctrl + c</kbd>可以中断程序的运行
+</div>
+</body>
+</html>
